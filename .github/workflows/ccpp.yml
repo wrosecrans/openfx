@@ -12,5 +12,5 @@ jobs:
     - name: configure
       run: cd HostSupport && mkdir build && cd build && cmake ../
     - name: make
-      run: cmake --build .
+      run: cd build && cmake --build .
 
