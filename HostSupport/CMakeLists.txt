@@ -11,8 +11,9 @@ set(HostSupportSource src/ofxhBinary.cpp  src/ofxhHost.cpp  src/ofxhImageEffect.
                       
 add_library(ofxHost ${HostSupportSource})
 
-target_include_directories(ofxHost PUBLIC include ../include)
+target_include_directories(ofxHost PUBLIC include ../include expat-2.0.1/lib)
+target_link_libraries(ofxHost Boost::filesystem)
 
-
-
+add_executable(ofxHostSimple examples/hostDemo.cpp)
+target_link_libraries(ofxHostSimple ofxHost)
 
