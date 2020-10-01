@@ -2734,7 +2734,7 @@ namespace OFX {
       {
       }
 
-      bool Host::pluginSupported(ImageEffectPlugin */*plugin*/, std::string &/*reason*/) const
+      bool Host::pluginSupported(ImageEffectPlugin * /*plugin*/, std::string &/*reason*/) const
       {
         return true;
       }
