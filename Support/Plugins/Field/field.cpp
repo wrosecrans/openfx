@@ -35,9 +35,6 @@ England
 
 */
 
-#ifdef _WINDOWS
-#include <windows.h>
-#endif
 
 #include <iostream>
 #include <stdio.h>
