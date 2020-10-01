@@ -32,6 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <iostream>
 
+#include <boost/dll.hpp>
+
 #if defined(WIN32) || defined(WIN64)
 #define I386
 #elif defined(__linux__) || defined(__FreeBSD__)
@@ -68,11 +70,7 @@ namespace OFX
   protected :
     std::string _binaryPath;
     bool _invalid;
-#if defined(UNIX)
-    void *_dlHandle;
-#elif defined (WINDOWS)
-    HINSTANCE _dlHandle;
-#endif
+    boost::dll::shared_library _dlHandle;
     time_t _time;
     off_t _size;
     int _users;
@@ -84,11 +82,11 @@ namespace OFX
 
     ~Binary() { unload(); }
 
-    bool isLoaded() const { return _dlHandle != 0; }
+    bool isLoaded() const { return _dlHandle.is_loaded(); }
 
     /// is this binary invalid? (did the a stat() or load() on the file fail,
     /// or are we missing a some of the symbols?
-    bool isInvalid() const { return _invalid; }
+    bool isInvalid() const { return _dlHandle.is_loaded(); }
 
     /// set invalid status (e.g. called by user if a mandatory symbol was missing)
     void setInvalid(bool invalid) { _invalid = invalid; }
