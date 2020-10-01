@@ -49,7 +49,7 @@ namespace OFX {
     ////////////////////////////////////////////////////////////////////////////////
     /// simple memory suite 
     namespace Memory {
-      static OfxStatus memoryAlloc(void */*handle*/, size_t bytes, void **data)
+      static OfxStatus memoryAlloc(void * /*handle*/, size_t bytes, void **data)
       {
         *data = malloc(bytes);
         if (*data) {
