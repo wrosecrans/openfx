@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.0)
 
 project(HostSupport)
 
+find_package(Boost COMPONENTS system filesystem)
+find_path(BOOST_DLL_INCLUDE_DIRS "boost/dll.hpp")
+
+
 set(HostSupportSource src/ofxhBinary.cpp  src/ofxhHost.cpp  src/ofxhImageEffect.cpp
                       src/ofxhMemory.cpp  src/ofxhPluginAPICache.cpp  src/ofxhPropertySuite.cpp
                       src/ofxhClip.cpp    src/ofxhImageEffectAPI.cpp  src/ofxhInteract.cpp
@@ -10,19 +14,21 @@ set(HostSupportSource src/ofxhBinary.cpp  src/ofxhHost.cpp  src/ofxhImageEffect.
                       )
                       
 add_library(ofxHost ${HostSupportSource})
-
-
 target_include_directories(ofxHost PUBLIC include ../include)
-
-find_package(Boost COMPONENTS system filesystem)
+target_include_directories(ofxHost PUBLIC ${BOOST_DLL_INCLUDE_DIRS})
+target_compile_definitions(ofxHost PUBLIC WINDOWS)
+target_link_libraries(ofxHost PUBLIC Boost::filesystem)
+target_link_libraries(ofxHost PUBLIC EXPAT::EXPAT)
 
 if(Boost_FOUND)
     add_executable(PluginChecker BoostHost/main.cpp)
-    target_link_libraries(PluginChecker Boost::filesystem dl)
+    target_link_libraries(PluginChecker Boost::filesystem)
     target_include_directories(PluginChecker PUBLIC include ../include)
 endif()
 
 
-add_executable(ofxHostSimple examples/hostDemo.cpp)
+add_executable(ofxHostSimple examples/hostDemo.cpp                examples/hostDemoClipInstance.cpp
+                             examples/hostDemoHostDescriptor.cpp  examples/hostDemoEffectInstance.cpp
+                             examples/hostDemoParamInstance.cpp )
 target_link_libraries(ofxHostSimple ofxHost)
 
