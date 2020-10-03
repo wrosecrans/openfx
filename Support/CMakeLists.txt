@@ -20,16 +20,18 @@ target_include_directories(OfxSupport PUBLIC include ../include)
 target_include_directories(OfxSupport PRIVATE ${BOOST_DLL_INCLUDE_DIRS})
 set_property(TARGET OfxSupport PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-ofxPlugin(field Plugins/Field field.cpp)
 
-set(Generator_Src randomGenerator.cpp noise.cpp)
+
+ofxPlugin(field Plugins/Field "field.cpp;info.plist")
+
+set(Generator_Src randomGenerator.cpp noise.cpp info.plist)
 ofxPlugin(generator Plugins/Generator "${Generator_Src}")
 
-ofxPlugin(invert Plugins/Invert invert.cpp)
+ofxPlugin(invert Plugins/Invert "invert.cpp;info.plist")
 
-ofxPlugin(retimer Plugins/Retimer retimer.cpp)
+ofxPlugin(retimer Plugins/Retimer "retimer.cpp;info.plist")
 
-ofxPlugin(transition Plugins/Transition crossFade.cpp)
+ofxPlugin(transition Plugins/Transition "crossFade.cpp;info.plist")
 
 
 if(OPENGL_FOUND)
