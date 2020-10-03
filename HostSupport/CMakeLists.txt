@@ -29,7 +29,7 @@ endif()
 
 if(Boost_FOUND)
     add_executable(PluginChecker BoostHost/main.cpp)
-    target_link_libraries(PluginChecker Boost::filesystem)
+    target_link_libraries(PluginChecker Boost::filesystem ofxHost)
     target_include_directories(PluginChecker PUBLIC include ../include)
 endif()
 
