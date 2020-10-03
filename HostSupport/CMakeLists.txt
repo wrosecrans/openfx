@@ -14,9 +14,18 @@ set(HostSupportSource src/ofxhBinary.cpp  src/ofxhHost.cpp  src/ofxhImageEffect.
 add_library(ofxHost ${HostSupportSource})
 target_include_directories(ofxHost PUBLIC include ../include)
 target_include_directories(ofxHost PUBLIC ${BOOST_DLL_INCLUDE_DIRS})
-target_compile_definitions(ofxHost PUBLIC WINDOWS)
 target_link_libraries(ofxHost PUBLIC Boost::filesystem)
 target_link_libraries(ofxHost PUBLIC EXPAT::EXPAT)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+#
+endif()
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#
+endif()
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+   target_compile_definitions(ofxHost PUBLIC WINDOWS)
+endif()
 
 if(Boost_FOUND)
     add_executable(PluginChecker BoostHost/main.cpp)
