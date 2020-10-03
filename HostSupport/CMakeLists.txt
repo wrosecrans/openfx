@@ -21,7 +21,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 #
 endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-#
+    target_link_libraries(ofxHost PUBLIC dl)
 endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
    target_compile_definitions(ofxHost PUBLIC WINDOWS)
