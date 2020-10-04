@@ -66,9 +66,9 @@ namespace OFX {
       ImageEffectPlugin::ImageEffectPlugin(PluginCache &pc, PluginBinary *pb, int pi, OfxPlugin *pl)
         : Plugin(pb, pi, pl)
         , _pc(pc)
-        , _baseDescriptor(NULL)
+        , _baseDescriptor(nullptr)
         , _madeKnownContexts(false)
-        , _pluginHandle(0)
+        , _pluginHandle(nullptr)
       {
         _baseDescriptor = gImageEffectHost->makeDescriptor(this);
       }
@@ -84,9 +84,9 @@ namespace OFX {
                                            int pluginMinorVersion)
         : Plugin(pb, pi, api, apiVersion, pluginId, rawId, pluginMajorVersion, pluginMinorVersion)
         , _pc(pc)
-        , _baseDescriptor(NULL) 
+        , _baseDescriptor(nullptr)
         , _madeKnownContexts(false)
-        , _pluginHandle(0)
+        , _pluginHandle(nullptr)
       {        
         _baseDescriptor = gImageEffectHost->makeDescriptor(this);
       }
@@ -108,7 +108,7 @@ namespace OFX {
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionUnload<<"()"<<std::endl;
 #           endif
-            stat = op->mainEntry(kOfxActionUnload, 0, 0, 0);
+            stat = op->mainEntry(kOfxActionUnload, nullptr, nullptr, nullptr);
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionUnload<<"()->"<<StatStr(stat)<<std::endl;
 #           endif
@@ -181,8 +181,8 @@ namespace OFX {
           OfxPlugin *op = _pluginHandle->getOfxPlugin();
           
           if (!op) {
-            _pluginHandle.reset(0);
-            return 0;
+            _pluginHandle.reset(nullptr);
+            return nullptr;
           }
 
           OfxStatus stat;
@@ -190,30 +190,30 @@ namespace OFX {
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionLoad<<"()"<<std::endl;
 #           endif
-            stat = op->mainEntry(kOfxActionLoad, 0, 0, 0);
+            stat = op->mainEntry(kOfxActionLoad, nullptr, nullptr, nullptr);
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionLoad<<"()->"<<StatStr(stat)<<std::endl;
 #           endif
           } CatchAllSetStatus(stat, gImageEffectHost, op, kOfxActionLoad);
 
           if (stat != kOfxStatOK && stat != kOfxStatReplyDefault) {
-            _pluginHandle.reset(0);
-            return 0;
+            _pluginHandle.reset(nullptr);
+            return nullptr;
           }
           
           try {
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionDescribe<<"()"<<std::endl;
 #           endif
-            stat = op->mainEntry(kOfxActionDescribe, getDescriptor().getHandle(), 0, 0);
+            stat = op->mainEntry(kOfxActionDescribe, getDescriptor().getHandle(), nullptr, nullptr);
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)op<<"->"<<kOfxActionDescribe<<"()->"<<StatStr(stat)<<std::endl;
 #           endif
           } CatchAllSetStatus(stat, gImageEffectHost, op, kOfxActionDescribe);
 
           if (stat != kOfxStatOK && stat != kOfxStatReplyDefault) {
-            _pluginHandle.reset(0);
-            return 0;
+            _pluginHandle.reset(nullptr);
+            return nullptr;
           }
         }
 
@@ -230,7 +230,7 @@ namespace OFX {
         }
 
         if (_knownContexts.find(context) == _knownContexts.end()) {
-          return 0;
+          return nullptr;
         }
 
         //        printf("doing context description.\n");
@@ -243,14 +243,14 @@ namespace OFX {
         OFX::Host::Property::Set inarg(inargspec);
 
         PluginHandle *ph = getPluginHandle();
-        std::auto_ptr<ImageEffect::Descriptor> newContext( gImageEffectHost->makeDescriptor(getDescriptor(), this));
+        std::unique_ptr<ImageEffect::Descriptor> newContext( gImageEffectHost->makeDescriptor(getDescriptor(), this));
 
         OfxStatus stat;
         try {
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)ph->getOfxPlugin()<<"->"<<kOfxImageEffectActionDescribeInContext<<"("<<context<<")"<<std::endl;
 #         endif
-          stat = ph->getOfxPlugin()->mainEntry(kOfxImageEffectActionDescribeInContext, newContext->getHandle(), inarg.getHandle(), 0);
+          stat = ph->getOfxPlugin()->mainEntry(kOfxImageEffectActionDescribeInContext, newContext->getHandle(), inarg.getHandle(), nullptr);
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)ph->getOfxPlugin()<<"->"<<kOfxImageEffectActionDescribeInContext<<"("<<context<<")->"<<StatStr(stat)<<std::endl;
 #         endif
@@ -260,7 +260,7 @@ namespace OFX {
           _contexts[context] = newContext.release();
           return _contexts[context];
         }
-        return 0;
+        return nullptr;
       }
 
       ImageEffect::Instance* ImageEffectPlugin::createInstance(const std::string &context, void *clientData)
@@ -282,7 +282,7 @@ namespace OFX {
           instance->populate();
           return instance;
         }
-        return 0;
+        return nullptr;
       }
 
       void ImageEffectPlugin::unload() {
@@ -292,7 +292,7 @@ namespace OFX {
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)_pluginHandle->getOfxPlugin()<<"->"<<kOfxActionUnload<<"()"<<std::endl;
 #           endif
-            stat = (*_pluginHandle)->mainEntry(kOfxActionUnload, 0, 0, 0);
+            stat = (*_pluginHandle)->mainEntry(kOfxActionUnload, nullptr, nullptr, nullptr);
 #           ifdef OFX_DEBUG_ACTIONS
               std::cout << "OFX: "<<(void*)_pluginHandle->getOfxPlugin()<<"->"<<kOfxActionUnload<<"()->"<<StatStr(stat)<<std::endl;
 #           endif
@@ -303,11 +303,11 @@ namespace OFX {
 
       PluginCache::PluginCache(OFX::Host::ImageEffect::Host &host) 
         : PluginAPICacheI(kOfxImageEffectPluginApi, 1, 1)
-        , _currentPlugin(0)
-        , _currentProp(0)
-        , _currentContext(0)
-        , _currentParam(0)
-        , _currentClip(0)
+        , _currentPlugin(nullptr)
+        , _currentProp(nullptr)
+        , _currentContext(nullptr)
+        , _currentParam(nullptr)
+        , _currentClip(nullptr)
         , _host(&host)
       {
         gImageEffectHost = &host;
@@ -320,7 +320,7 @@ namespace OFX {
       ImageEffectPlugin *PluginCache::getPluginById(const std::string &id, int vermaj, int vermin)
       {
         // return the highest version one, which fits the pattern provided
-        ImageEffectPlugin *sofar = 0;
+        ImageEffectPlugin *sofar = nullptr;
         std::string identifier = id;
 
         // Who says the pluginIdentifier is case-insensitive? OFX 1.3 spec doesn't mention this.
@@ -362,7 +362,7 @@ namespace OFX {
       ImageEffectPlugin *PluginCache::getPluginByLabel(const std::string &label, int vermaj, int vermin)
       {
         // return the highest version one, which fits the pattern provided
-        ImageEffectPlugin *sofar = 0;
+        ImageEffectPlugin *sofar = nullptr;
 
         for (std::vector<ImageEffectPlugin *>::iterator i=_plugins.begin();i!=_plugins.end();i++) {
           ImageEffectPlugin *p = *i;
@@ -414,7 +414,7 @@ namespace OFX {
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionLoad<<"()"<<std::endl;
 #         endif
-          stat = plug->mainEntry(kOfxActionLoad, 0, 0, 0);
+          stat = plug->mainEntry(kOfxActionLoad, nullptr, nullptr, nullptr);
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionLoad<<"()->"<<StatStr(stat)<<std::endl;
 #         endif
@@ -429,7 +429,7 @@ namespace OFX {
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionDescribe<<"()"<<std::endl;
 #         endif
-          stat = plug->mainEntry(kOfxActionDescribe, p->getDescriptor().getHandle(), 0, 0);
+          stat = plug->mainEntry(kOfxActionDescribe, p->getDescriptor().getHandle(), nullptr, nullptr);
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionDescribe<<"()->"<<StatStr(stat)<<std::endl;
 #         endif
@@ -454,7 +454,7 @@ namespace OFX {
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionUnload<<"()"<<std::endl;
 #         endif
-          stat = plug->mainEntry(kOfxActionUnload, 0, 0, 0);
+          stat = plug->mainEntry(kOfxActionUnload, nullptr, nullptr, nullptr);
 #         ifdef OFX_DEBUG_ACTIONS
             std::cout << "OFX: "<<(void*)plug.getOfxPlugin()<<"->"<<kOfxActionUnload<<"()->"<<StatStr(stat)<<std::endl;
 #         endif
@@ -525,16 +525,16 @@ namespace OFX {
 
       void PluginCache::xmlElementEnd(const std::string &el) {
         if (el == "param") {
-          _currentParam = 0;
+          _currentParam = nullptr;
         }
 
         if (el == "context") {
-          _currentContext = 0;
+          _currentContext = nullptr;
         }
       }
 
       void PluginCache::endXmlParsing() {
-        _currentPlugin = 0;
+        _currentPlugin = nullptr;
       }
 
       void PluginCache::saveXML(Plugin *ip, std::ostream &os) const {
