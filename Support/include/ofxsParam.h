@@ -263,7 +263,7 @@ namespace OFX {
         ValueParamDescriptor(const std::string &name, ParamTypeEnum type, OfxPropertySetHandle props);
 
         friend class ParamSetDescriptor;
-        std::auto_ptr<ParamInteractDescriptor> _interact;
+        std::unique_ptr<ParamInteractDescriptor> _interact;
     public :
         /** @brief dtor */
         ~ValueParamDescriptor();
@@ -693,7 +693,7 @@ namespace OFX {
 
         OfxParamHandle _ofxParamHandle;
         ParamSetDescriptor* _paramSet;
-        std::auto_ptr<ParamInteractDescriptor> _interact;
+        std::unique_ptr<ParamInteractDescriptor> _interact;
 
         // so it can make one
         friend class ParamSetDescriptor;
@@ -973,7 +973,7 @@ namespace OFX {
         unsigned int getNumKeys(void);
 
         /** @brief get the time of the nth key, nth must be between 0 and getNumKeys-1 */
-        double getKeyTime(int nthKey) throw(OFX::Exception::Suite, std::out_of_range);
+        double getKeyTime(int nthKey) noexcept(false);
 
         /** @brief find the index of a key by a time */
         int getKeyIndex(double time, 

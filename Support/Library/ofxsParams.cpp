@@ -194,7 +194,7 @@ namespace OFX {
   void 
     ParamDescriptor::setIcon(const std::string &v, bool pngFormat)
   {
-    _paramProps.propSetString(kOfxPropIcon, v, (int)pngFormat, false); // introduced in OFX 1.2
+    _paramProps.propSetString(kOfxPropIcon, v, pngFormat, false); // introduced in OFX 1.2
   }
     
   bool
@@ -872,7 +872,7 @@ namespace OFX {
 
   void CustomParamDescriptor::setCustomInterpolation(bool v)
   {
-    _paramProps.propSetPointer(kOfxParamPropCustomInterpCallbackV1, v ? (void*)OFX::Private::customParamInterpolationV1Entry : NULL);
+    _paramProps.propSetPointer(kOfxParamPropCustomInterpCallbackV1, v ? (void*)OFX::Private::customParamInterpolationV1Entry : nullptr);
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -921,15 +921,15 @@ namespace OFX {
   /** @brief hidden constructor */
   ParametricParamDescriptor::ParametricParamDescriptor(const std::string &name, OfxPropertySetHandle props)
     : ParamDescriptor(name, eParametricParam, props)
-    , _ofxParamHandle(0)
-    , _paramSet(0)
+    , _ofxParamHandle(nullptr)
+    , _paramSet(nullptr)
   {
   }
 
   void ParametricParamDescriptor::setParamSet(ParamSetDescriptor& paramSet)
   {
     _paramSet = &paramSet;
-    OFX::Private::gParamSuite->paramGetHandle(_paramSet->getParamSetHandle(), getName().c_str(), &_ofxParamHandle, 0);
+    OFX::Private::gParamSuite->paramGetHandle(_paramSet->getParamSetHandle(), getName().c_str(), &_ofxParamHandle, nullptr);
   }
 
   void ParametricParamDescriptor::setRange(const double min, const double max)
@@ -985,7 +985,7 @@ namespace OFX {
   // Descriptor for a set of parameters
   /** @brief hidden ctor */
   ParamSetDescriptor::ParamSetDescriptor(void)
-    : _paramSetHandle(0)
+    : _paramSetHandle(nullptr)
   {
   }
 
@@ -1402,7 +1402,7 @@ namespace OFX {
 
   /** @brief get the time of the nth key, nth must be between 0 and getNumKeys-1 */
   double 
-    ValueParam::getKeyTime(int nthKey) throw(OFX::Exception::Suite, std::out_of_range)
+    ValueParam::getKeyTime(int nthKey) noexcept(false)
   {
     if(!OFX::Private::gParamSuite->paramGetKeyTime) throwHostMissingSuiteException("paramGetKeyTime");
     double v = 0;
@@ -2840,13 +2840,13 @@ namespace OFX {
     {
     case eStringParam :
       {
-        StringParam* ptr = 0;
+        StringParam* ptr = nullptr;
         fetchParam(name, t, ptr);
         return ptr;
       }
     case eIntParam :           
       {
-        IntParam* ptr = 0;
+        IntParam* ptr = nullptr;
         fetchParam(name, t, ptr);
         return ptr;
       }
