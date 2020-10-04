@@ -214,7 +214,7 @@ class GenericTestBase : public OFX::ImageProcessor {
 protected :
   OFX::Image *_srcImg;
 public :
-  GenericTestBase(OFX::ImageEffect &instance): OFX::ImageProcessor(instance), _srcImg(0)
+  GenericTestBase(OFX::ImageEffect &instance): OFX::ImageProcessor(instance), _srcImg(nullptr)
   {        
   }
   void setSrcImg(OFX::Image *v) {_srcImg = v;}
@@ -234,7 +234,7 @@ public :
       PIX *dstPix = (PIX *) _dstImg->getPixelAddress(procWindow.x1, y);
       for(int x = procWindow.x1; x < procWindow.x2; x++) 
       {
-        PIX *srcPix = (PIX *)  (_srcImg ? _srcImg->getPixelAddress(x, y) : 0);
+        PIX *srcPix = (PIX *)  (_srcImg ? _srcImg->getPixelAddress(x, y) : nullptr);
         if(srcPix) 
         {
           for(int c = 0; c < nComponents; c++)
@@ -262,7 +262,7 @@ public:
     OfxRangeD range = srcClip->getFrameRange();
     for(double d = range.min; d< range.max; ++d)
     {
-      std::auto_ptr<OFX::Image> src(srcClip->fetchImage(d));
+      std::unique_ptr<OFX::Image> src(srcClip->fetchImage(d));
       dbl->setValueAtTime(d, d);
     }
   }
@@ -277,7 +277,7 @@ protected :
   OFX::Clip *srcClip_;
 
 public :
-  GenericTestPlugin(OfxImageEffectHandle handle) : ImageEffect(handle), dstClip_(0), srcClip_(0)
+  GenericTestPlugin(OfxImageEffectHandle handle) : ImageEffect(handle), dstClip_(nullptr), srcClip_(nullptr)
   {
     dstClip_ = fetchClip(kOfxImageEffectOutputClipName);
     srcClip_ = fetchClip(kOfxImageEffectSimpleSourceClipName);
@@ -362,10 +362,10 @@ public :
 
 void GenericTestPlugin::setupAndProcess(GenericTestBase &processor, const OFX::RenderArguments &args)
 {
-  std::auto_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
   OFX::BitDepthEnum dstBitDepth       = dst->getPixelDepth();
   OFX::PixelComponentEnum dstComponents  = dst->getPixelComponents();
-  std::auto_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
 
   if(src.get()) 
   {

@@ -53,7 +53,7 @@ public :
   /** @brief no arg ctor */
   FieldBase(OFX::ImageEffect &instance, OFX::FieldEnum field)
     : OFX::ImageProcessor(instance)
-      , _srcImg(0), _field(field)
+      , _srcImg(nullptr), _field(field)
   {        
   }
 
@@ -154,12 +154,12 @@ void
 FieldPlugin::setupAndProcess(FieldBase &processor, const OFX::RenderArguments &args)
 {
   // get a dst image
-  std::auto_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
   OFX::BitDepthEnum dstBitDepth       = dst->getPixelDepth();
   OFX::PixelComponentEnum dstComponents  = dst->getPixelComponents();
 
   // fetch main input image
-  std::auto_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
 
   // make sure bit depths are sane
   if(src.get()) {

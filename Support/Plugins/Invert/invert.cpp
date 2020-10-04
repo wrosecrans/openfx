@@ -54,7 +54,7 @@ public :
   /** @brief no arg ctor */
   InvertBase(OFX::ImageEffect &instance)
     : OFX::ImageProcessor(instance)
-    , _srcImg(0)
+    , _srcImg(nullptr)
   {        
   }
 
@@ -81,7 +81,7 @@ public :
 
       for(int x = procWindow.x1; x < procWindow.x2; x++) {
 
-        PIX *srcPix = (PIX *)  (_srcImg ? _srcImg->getPixelAddress(x, y) : 0);
+        PIX *srcPix = (PIX *)  (_srcImg ? _srcImg->getPixelAddress(x, y) : nullptr);
 
         // do we have a source image to scale up
         if(srcPix) {
@@ -115,8 +115,8 @@ public :
   /** @brief ctor */
   InvertPlugin(OfxImageEffectHandle handle)
     : ImageEffect(handle)
-    , dstClip_(0)
-    , srcClip_(0)
+    , dstClip_(nullptr)
+    , srcClip_(nullptr)
   {
     dstClip_ = fetchClip(kOfxImageEffectOutputClipName);
     srcClip_ = fetchClip(kOfxImageEffectSimpleSourceClipName);
@@ -142,12 +142,12 @@ void
 InvertPlugin::setupAndProcess(InvertBase &processor, const OFX::RenderArguments &args)
 {
   // get a dst image
-  std::auto_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> dst(dstClip_->fetchImage(args.time));
   OFX::BitDepthEnum dstBitDepth       = dst->getPixelDepth();
   OFX::PixelComponentEnum dstComponents  = dst->getPixelComponents();
 
   // fetch main input image
-  std::auto_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
+  std::unique_ptr<OFX::Image> src(srcClip_->fetchImage(args.time));
 
   // make sure bit depths are sane
   if(src.get()) {

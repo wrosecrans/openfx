@@ -66,11 +66,11 @@ public :
     /** @brief ctor */
     RetimerPlugin(OfxImageEffectHandle handle)
       : ImageEffect(handle)
-      , dstClip_(0)
-      , srcClip_(0)
-      , sourceTime_(0)
-      , speed_(0)
-      , duration_(0)
+      , dstClip_(nullptr)
+      , srcClip_(nullptr)
+      , sourceTime_(nullptr)
+      , speed_(nullptr)
+      , duration_(nullptr)
     {
         dstClip_ = fetchClip(kOfxImageEffectOutputClipName);
         srcClip_ = fetchClip(kOfxImageEffectSimpleSourceClipName);
@@ -161,7 +161,7 @@ void
 RetimerPlugin::setupAndProcess(OFX::ImageBlenderBase &processor, const OFX::RenderArguments &args)
 {
     // get a dst image
-    std::auto_ptr<OFX::Image>  dst(dstClip_->fetchImage(args.time));
+    std::unique_ptr<OFX::Image>  dst(dstClip_->fetchImage(args.time));
     OFX::BitDepthEnum          dstBitDepth    = dst->getPixelDepth();
     OFX::PixelComponentEnum    dstComponents  = dst->getPixelComponents();
   
@@ -183,8 +183,8 @@ RetimerPlugin::setupAndProcess(OFX::ImageBlenderBase &processor, const OFX::Rend
     framesNeeded(sourceTime, args.fieldToRender, &fromTime, &toTime, &blend);
 
     // fetch the two source images
-    std::auto_ptr<OFX::Image> fromImg(srcClip_->fetchImage(fromTime));
-    std::auto_ptr<OFX::Image> toImg(srcClip_->fetchImage(toTime));
+    std::unique_ptr<OFX::Image> fromImg(srcClip_->fetchImage(fromTime));
+    std::unique_ptr<OFX::Image> toImg(srcClip_->fetchImage(toTime));
 
     // make sure bit depths are sane
     if(fromImg.get()) checkComponents(*fromImg, dstBitDepth, dstComponents);
