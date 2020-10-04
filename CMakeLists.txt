@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 
 
-project(OpenFX)
+project(OpenFX CXX)
 
 
 find_package(OpenGL)

@@ -24,7 +24,7 @@ function(ofxPlugin name dir sources)
     add_library(${name} SHARED)
     foreach(src ${sources})
 
-        if(${src} MATCHES "info.plist")
+        if(${src} MATCHES "Info.plist")
             message("  Found plist ${dir}/${src}")
             file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/")
 

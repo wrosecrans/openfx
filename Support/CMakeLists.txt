@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 project(Support)
 
 #set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -15,7 +15,8 @@ add_library(OfxSupport ${SupportSource})
 
 target_include_directories(OfxSupport PUBLIC include ../include)
 target_include_directories(OfxSupport PRIVATE ${BOOST_DLL_INCLUDE_DIRS})
-# set_property(TARGET OfxSupport PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET OfxSupport PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 # Very helpful on Windows.  Should be harmless on other platforms, and keeps builds consistent.
 target_compile_definitions(OfxSupport PUBLIC NOMINMAX)
 

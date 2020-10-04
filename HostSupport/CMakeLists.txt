@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.14)
-project(HostSupport)
+cmake_minimum_required(VERSION 3.10)
+project(HostSupport CXX)
 
 find_package(Boost COMPONENTS system filesystem)
 find_path(BOOST_DLL_INCLUDE_DIRS "boost/dll.hpp")
