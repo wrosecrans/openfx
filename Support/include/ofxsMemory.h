@@ -37,6 +37,8 @@ England
 
 */
 
+#include <cstddef> // For size_t
+
 /** @file This file contains core code that wraps the ofx memory allocator with C++ functions.
 
 This file only holds code that is visible to a plugin implementation, and so hides much
@@ -63,7 +65,7 @@ namespace OFX {
     Suceeds or throws std::bad_alloc
     */   
     void *allocate(size_t nBytes,
-      ImageEffect *handle = 0) throw(std::bad_alloc);
+      ImageEffect *handle = nullptr) noexcept(false);
 
     /** @brief release memory
 
