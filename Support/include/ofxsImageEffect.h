@@ -151,27 +151,27 @@ namespace OFX {
   };
 
   /** @brief turns a field string into and enum */
-  FieldEnum mapStrToFieldEnum(const std::string &str)  throw(std::invalid_argument);
+  FieldEnum mapStrToFieldEnum(const std::string &str)  noexcept(false);
 
   ////////////////////////////////////////////////////////////////////////////////
   /** @brief map a std::string to a context enum */
-  ContextEnum mapToContextEnum(const std::string &s) throw(std::invalid_argument);
+  ContextEnum mapToContextEnum(const std::string &s) noexcept(false);
 
-  const char* mapContextEnumToStr(ContextEnum context) throw(std::invalid_argument);
+  const char* mapContextEnumToStr(ContextEnum context) noexcept(false);
 
   const char* mapMessageTypeEnumToStr(OFX::Message::MessageTypeEnum type);
 
   OFX::Message::MessageReplyEnum mapToMessageReplyEnum(OfxStatus stat);
 
-  InstanceChangeReason mapToInstanceChangedReason(const std::string &s) throw(std::invalid_argument);
+  InstanceChangeReason mapToInstanceChangedReason(const std::string &s) noexcept(false);
 
-  BitDepthEnum mapStrToBitDepthEnum(const std::string &str) throw(std::invalid_argument);
+  BitDepthEnum mapStrToBitDepthEnum(const std::string &str) noexcept(false);
 
-  const char* mapBitDepthEnumToStr(BitDepthEnum bitDepth) throw(std::invalid_argument);
+  const char* mapBitDepthEnumToStr(BitDepthEnum bitDepth) noexcept(false);
 
-  PixelComponentEnum mapStrToPixelComponentEnum(const std::string &str) throw(std::invalid_argument);
+  PixelComponentEnum mapStrToPixelComponentEnum(const std::string &str) noexcept(false);
 
-  const char* mapPixelComponentEnumToStr(PixelComponentEnum pixelComponent) throw(std::invalid_argument);
+  const char* mapPixelComponentEnumToStr(PixelComponentEnum pixelComponent) noexcept(false);
 
   class PluginFactory
   {
@@ -398,7 +398,7 @@ namespace OFX {
     std::map<std::string, std::string> _clipROIPropNames;
     std::map<std::string, std::string> _clipFrameRangePropNames;
 
-    std::auto_ptr<EffectOverlayDescriptor> _overlayDescriptor;
+    std::unique_ptr<EffectOverlayDescriptor> _overlayDescriptor;
   public :
     /** @brief ctor */
     ImageEffectDescriptor(OfxImageEffectHandle handle);

@@ -84,7 +84,7 @@ namespace OFX {
   //Put it all into a map, so we know when to delete what!
   struct OfxPlugInfo
   {
-    OfxPlugInfo():_factory(0), _plug(0){}
+    OfxPlugInfo():_factory(nullptr), _plug(nullptr){}
     OfxPlugInfo(OFX::PluginFactory* f, OfxPlugin* p):_factory(f), _plug(p){}
     OFX::PluginFactory* _factory;
     OfxPlugin* _plug;
@@ -138,24 +138,24 @@ namespace OFX {
   {
     if(gHostDescriptionHasInit)
       return &gHostDescription;
-    return NULL;
+    return nullptr;
   }
 
   namespace Private {        
     // Suite and host pointers
-    OfxHost               *gHost = 0;
-    OfxImageEffectSuiteV1 *gEffectSuite = 0;
-    OfxPropertySuiteV1    *gPropSuite = 0;
-    OfxInteractSuiteV1    *gInteractSuite = 0;
-    OfxParameterSuiteV1   *gParamSuite = 0;
-    OfxMemorySuiteV1      *gMemorySuite = 0;
-    OfxMultiThreadSuiteV1 *gThreadSuite = 0;
-    OfxMessageSuiteV1     *gMessageSuite = 0;
-    OfxMessageSuiteV2     *gMessageSuiteV2 = 0;
-    OfxProgressSuiteV1    *gProgressSuiteV1 = 0;
-    OfxProgressSuiteV2    *gProgressSuiteV2 = 0;
-    OfxTimeLineSuiteV1    *gTimeLineSuite = 0;
-    OfxParametricParameterSuiteV1 *gParametricParameterSuite = 0;
+    OfxHost               *gHost = nullptr;
+    OfxImageEffectSuiteV1 *gEffectSuite = nullptr;
+    OfxPropertySuiteV1    *gPropSuite = nullptr;
+    OfxInteractSuiteV1    *gInteractSuite = nullptr;
+    OfxParameterSuiteV1   *gParamSuite = nullptr;
+    OfxMemorySuiteV1      *gMemorySuite = nullptr;
+    OfxMultiThreadSuiteV1 *gThreadSuite = nullptr;
+    OfxMessageSuiteV1     *gMessageSuite = nullptr;
+    OfxMessageSuiteV2     *gMessageSuiteV2 = nullptr;
+    OfxProgressSuiteV1    *gProgressSuiteV1 = nullptr;
+    OfxProgressSuiteV2    *gProgressSuiteV2 = nullptr;
+    OfxTimeLineSuiteV1    *gTimeLineSuite = nullptr;
+    OfxParametricParameterSuiteV1 *gParametricParameterSuite = nullptr;
 #ifdef OFX_SUPPORTS_OPENGLRENDER
     OfxImageEffectOpenGLRenderSuiteV1 *gOpenGLRenderSuite = 0;
 #endif
@@ -166,7 +166,7 @@ namespace OFX {
   };
 
   /** @brief map a std::string to a context */
-  ContextEnum mapToContextEnum(const std::string &s) throw(std::invalid_argument)
+  ContextEnum mapToContextEnum(const std::string &s) noexcept(false)
   {
     if(s == kOfxImageEffectContextGenerator) return eContextGenerator;
     if(s == kOfxImageEffectContextFilter) return eContextFilter;
@@ -178,7 +178,7 @@ namespace OFX {
     throw std::invalid_argument(s);
   }
 
-  const char* mapContextEnumToStr(ContextEnum context) throw(std::invalid_argument)
+  const char* mapContextEnumToStr(ContextEnum context) noexcept(false)
   {
     switch (context) {
       case eContextGenerator:
@@ -214,7 +214,7 @@ namespace OFX {
     else if(type == OFX::Message::eMessageQuestion)
       return kOfxMessageQuestion;
     OFX::Log::error(true, "Unknown message type enum '%d'", type);
-    return 0;
+    return nullptr;
   }
 
   OFX::Message::MessageReplyEnum mapToMessageReplyEnum(OfxStatus stat)
@@ -232,7 +232,7 @@ namespace OFX {
   }
 
   /** @brief map a std::string to a context */
-  InstanceChangeReason mapToInstanceChangedReason(const std::string &s) throw(std::invalid_argument)
+  InstanceChangeReason mapToInstanceChangedReason(const std::string &s) noexcept(false)
   {
     if(s == kOfxChangePluginEdited) return eChangePluginEdit;
     if(s == kOfxChangeUserEdited) return eChangeUserEdit;
@@ -242,7 +242,7 @@ namespace OFX {
   }
 
   /** @brief turns a bit depth string into and enum */
-  BitDepthEnum mapStrToBitDepthEnum(const std::string &str) throw(std::invalid_argument)
+  BitDepthEnum mapStrToBitDepthEnum(const std::string &str) noexcept(false)
   {
     if(str == kOfxBitDepthByte) {
       return eBitDepthUByte;
@@ -265,7 +265,7 @@ namespace OFX {
   }
 
   /** @brief turns a bit depth string into and enum */
-  const char* mapBitDepthEnumToStr(BitDepthEnum bitDepth) throw(std::invalid_argument)
+  const char* mapBitDepthEnumToStr(BitDepthEnum bitDepth) noexcept(false)
   {
     switch (bitDepth) {
       case eBitDepthUByte:
@@ -287,7 +287,7 @@ namespace OFX {
   }
 
   /** @brief turns a pixel component string into and enum */
-  PixelComponentEnum mapStrToPixelComponentEnum(const std::string &str) throw(std::invalid_argument)
+  PixelComponentEnum mapStrToPixelComponentEnum(const std::string &str) noexcept(false)
   {
     if(str == kOfxImageComponentRGBA) {
       return ePixelComponentRGBA;
@@ -307,7 +307,7 @@ namespace OFX {
   }
 
   /** @brief turns a pixel component string into and enum */
-  const char* mapPixelComponentEnumToStr(PixelComponentEnum pixelComponent) throw(std::invalid_argument)
+  const char* mapPixelComponentEnumToStr(PixelComponentEnum pixelComponent) noexcept(false)
   {
     switch (pixelComponent) {
       case ePixelComponentRGBA:
@@ -325,7 +325,7 @@ namespace OFX {
   }
 
   /** @brief turns a premultiplication string into and enum */
-  static PreMultiplicationEnum mapStrToPreMultiplicationEnum(const std::string &str) throw(std::invalid_argument)
+  static PreMultiplicationEnum mapStrToPreMultiplicationEnum(const std::string &str) noexcept(false)
   {
     if(str == kOfxImageOpaque) {
       return eImageOpaque;
@@ -342,7 +342,7 @@ namespace OFX {
   }
 
   /** @brief turns a field string into and enum */
-  FieldEnum mapStrToFieldEnum(const std::string &str)  throw(std::invalid_argument)
+  FieldEnum mapStrToFieldEnum(const std::string &str)  noexcept(false)
   {
     if(str == kOfxImageFieldNone) {
       return eFieldNone;
@@ -495,7 +495,7 @@ namespace OFX {
     for(iter = _definedClips.begin(); iter != _definedClips.end(); ++iter) {
       if(iter->second) {
         delete iter->second;
-        iter->second = NULL;
+        iter->second = nullptr;
       }
     }
   }
@@ -893,7 +893,7 @@ namespace OFX {
   {
     // are we in the image bounds
     if(x < _bounds.x1 || x >= _bounds.x2 || y < _bounds.y1 || y >= _bounds.y2 || _pixelBytes == 0)
-      return 0;
+      return nullptr;
 
     char *pix = ((char *) _pixelData) + (size_t)(y - _bounds.y1) * _rowBytes;
     pix += (x - _bounds.x1) * _pixelBytes;
@@ -2021,7 +2021,7 @@ namespace OFX {
       // fetch the instance data out of the properties
       instance = (ImageEffect *) props.propGetPointer(kOfxPropInstanceData);
 
-      OFX::Log::error(instance == 0, "Instance data handle in effect instance properties is NULL!");
+      OFX::Log::error(instance == nullptr, "Instance data handle in effect instance properties is NULL!");
 
       // need to throw something here
 
@@ -2037,19 +2037,19 @@ namespace OFX {
       bool handleCanBeNull, bool inArgsCanBeNull, bool outArgsCanBeNull)
     {
       if(handleCanBeNull)
-        OFX::Log::warning(handle != 0, "Handle passed to '%s' is not null.", action.c_str());
+        OFX::Log::warning(handle != nullptr, "Handle passed to '%s' is not null.", action.c_str());
       else
-        OFX::Log::error(handle == 0, "'Handle passed to '%s' is null.", action.c_str());
+        OFX::Log::error(handle == nullptr, "'Handle passed to '%s' is null.", action.c_str());
 
       if(inArgsCanBeNull)
-        OFX::Log::warning(inArgsHandle != 0, "'inArgs' Handle passed to '%s' is not null.", action.c_str());
+        OFX::Log::warning(inArgsHandle != nullptr, "'inArgs' Handle passed to '%s' is not null.", action.c_str());
       else
-        OFX::Log::error(inArgsHandle == 0, "'inArgs' handle passed to '%s' is null.", action.c_str());
+        OFX::Log::error(inArgsHandle == nullptr, "'inArgs' handle passed to '%s' is null.", action.c_str());
 
       if(outArgsCanBeNull)
-        OFX::Log::warning(outArgsHandle != 0, "'outArgs' Handle passed to '%s' is not null.", action.c_str());
+        OFX::Log::warning(outArgsHandle != nullptr, "'outArgs' Handle passed to '%s' is not null.", action.c_str());
       else
-        OFX::Log::error(outArgsHandle == 0, "'outArgs' handle passed to '%s' is null.", action.c_str());
+        OFX::Log::error(outArgsHandle == nullptr, "'outArgs' handle passed to '%s' is null.", action.c_str());
 
       // validate the property sets on the arguments
       OFX::Validation::validateActionArgumentsProperties(action, inArgsHandle, outArgsHandle);
@@ -2963,7 +2963,7 @@ static
 OFX::OfxPlugInfo generatePlugInfo(OFX::PluginFactory* factory, std::string& newID)
 {
   newID = factory->getUID();
-  std::auto_ptr<OfxPlugin> ofxPlugin(new OfxPlugin());
+  std::unique_ptr<OfxPlugin> ofxPlugin(new OfxPlugin());
   ofxPlugin->pluginApi  = kOfxImageEffectPluginApi;
   ofxPlugin->apiVersion = 1;
   ofxPlugin->pluginIdentifier   = factory->getID().c_str();
