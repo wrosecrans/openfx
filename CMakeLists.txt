@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 
-
 project(OpenFX CXX)
 
+include(ofx.cmake)
 
-find_package(OpenGL)
+find_package(OpenGL REQUIRED)
 find_package(EXPAT REQUIRED)
 find_package(Boost COMPONENTS filesystem system)
 find_path(BOOST_DLL_INCLUDE_DIRS "boost/dll.hpp")
