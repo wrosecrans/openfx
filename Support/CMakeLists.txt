@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 project(Support)
-#include(ofx.cmake)
 
 set(SupportSource Library/ofxsCore.cpp  Library/ofxsInteract.cpp  Library/ofxsMultiThread.cpp
                   Library/ofxsProperty.cpp  Library/ofxsImageEffect.cpp  Library/ofxsLog.cpp

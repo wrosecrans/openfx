@@ -11,7 +11,7 @@
 
 
 using std::string;
-using std::cout;  using std::endl;
+using std::cout;  using std::endl;  using std::cerr;
 
 using boost::dll::shared_library;
 using boost::dll::library_info;
@@ -52,9 +52,11 @@ bool report_on_plugin(string plugin_path) {
     shared_library library(plugin_path);
 
     if (! library.has("OfxGetNumberOfPlugins")) {
+        cerr << "Library is missing the required entrypoint OfxGetNumberOfPlugins" << endl;
         return false;
     }
     if (! library.has("OfxGetPlugin")) {
+        cerr << "Library is missing the required entrypoint OfxGetPlugin" << endl;
         return false;
     }
     std::function<get_num> get_num_f = library.get<get_num>("OfxGetNumberOfPlugins");
@@ -71,7 +73,15 @@ bool report_on_plugin(string plugin_path) {
 
 
 
-int main(void) {
+int main(int argc, char **argv) {
+    if (argc == 2 && std::string("--help") == argv[1]) {
+        cout << "Do bare minimum validity checks on an OFX plugin." << endl;
+        cout << "  Pass a path to an OFX plugin" << endl;
+        return 0;
+    }
+    if (argc == 2 ) {
+        return ! report_on_plugin(argv[1]);
+    }
     auto sample = string("/home/will/Documents/dev/github-wrosecrans/openfx-misc/build/Misc.ofx");
     report_on_plugin(sample);
     return 0;

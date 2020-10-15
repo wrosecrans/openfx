@@ -20,24 +20,28 @@ endif()
 
 
 function(setup_ofx_plugin name)
-
     set_target_properties(${name} PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Contents/${OFX_ARCHITECTURE}/
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Contents/${OFX_ARCHITECTURE}/)
     set_target_properties(${name} PROPERTIES PREFIX "")
     set_target_properties(${name} PROPERTIES SUFFIX ".ofx")
+    if(${OFX_Tests})
+        message("    Adding test ${name}_test ")
+        add_test(NAME "${name}_test" COMMAND $<TARGET_FILE:PluginChecker> $<TARGET_FILE:${name}>)
+    endif()
+
 endfunction()
 
 function(copy_ofx_resources name sources)
     foreach(src ${sources})
         if(${src} MATCHES ".*Info.plist")
-            message("  Found plist ${dir}/${src}")
+            # message("  Found plist ${dir}/${src}")
             file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/")
         elseif(${src} MATCHES ".*\(\.svg|\.png|\.xml)")
-            message("  Found resource ${dir}/${src}")
+            # message("  Found resource ${dir}/${src}")
             file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Resources/")
         elseif(${src} MATCHES ".*\(\.cc|\.[hH]|\.cpp)")
-            message("  Skipping source file from resource copying. ${src}")
+            # message("  Skipping source file from resource copying. ${src}")
         else()
             message("  Unknown resource: ${dir}/${src}")
             file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Resources/")
@@ -47,6 +51,7 @@ endfunction()
 
 
 function(add_ofx_plugin name sources)
+    message("  Adding OFX plugin without Support library ${name}")
     add_library(${name} SHARED ${sources})
     copy_ofx_resources(${name} "${sources}")
     setup_ofx_plugin(${name})
@@ -55,7 +60,7 @@ endfunction()
 
 function(add_ofxsupport_plugin name sources)
     message("  Adding OFX plugin using Support library ${name}")
-    message("${sources}")
+    # message("${sources}")
     add_library(${name} SHARED ${sources})
     copy_ofx_resources(${name} "${sources}")
     setup_ofx_plugin(${name})
@@ -64,7 +69,7 @@ endfunction()
 
 
 function(add_ofxsupport_example directory)
-    message("Adding OFX Support Example in ${directory}")
+    # message("Adding OFX Support Example in ${directory}")
     file( GLOB example_sources
         Plugins/${directory}/*.cpp Plugins/${directory}/*.cc
         Plugins/${directory}/*.H Plugins/${directory}/*.h
@@ -89,31 +94,4 @@ function(add_ofx_example directory)
     add_ofx_plugin(${directory} "${example_sources}")
 endfunction()
 
-function(ofxPlugin name dir sources)
-    set(name "${OFX_Prefix}${name}")
-    message("Project binary dir: ${PROJECT_BINARY_DIR} : ${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Contents/${OFX_ARCHITECTURE}/")
-    message("Adding plugin '${name}' with ")
-    add_library(${name} SHARED)
-    foreach(src ${sources})
 
-        if(${src} MATCHES "Info.plist")
-            message("  Found plist ${dir}/${src}")
-            file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/")
-
-        elseif(${src} MATCHES ".*\(\.svg|\.png|\.xml)")
-                message("  Found resource ${dir}/${src}")
-                file(COPY "${dir}/${src}" DESTINATION "${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Resources/")
-        else()
-            message("  ${dir}/${src}")
-        endif()
-        target_sources(${name} PRIVATE ${dir}/${src})
-    endforeach()
-
-
-    target_link_libraries(${name} OfxSupport)
-    set_target_properties(${name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Contents/${OFX_ARCHITECTURE}/
-        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${name}.ofx.bundle/Contents/${OFX_ARCHITECTURE}/)
-    set_target_properties(${name} PROPERTIES PREFIX "")
-    set_target_properties(${name} PROPERTIES SUFFIX ".ofx")
-endfunction()

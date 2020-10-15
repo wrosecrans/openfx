@@ -935,7 +935,7 @@ General status codes start at 1 and continue until 999
 #define kOfxStatErrMissingHostFeature ((int) 4)
 
 /** @brief Status error code for an unsupported feature/operation */
-#define kOfxStatErrUnsupported ((int) 5)
+#define kOfxStatErrUnsupported (static_cast<int> (5))
 
 /** @brief Status error code for an operation attempting to create something that exists */
 #define kOfxStatErrExists  ((int) 6)
@@ -956,7 +956,7 @@ General status codes start at 1 and continue until 999
 #define kOfxStatErrValue ((int) 11)
 
 /** @brief OfxStatus returned indicating a 'yes' */
-#define kOfxStatReplyYes ((int) 12)
+#define kOfxStatReplyYes (static_cast<int> (12))
 
 /** @brief OfxStatus returned indicating a 'no' */
 #define kOfxStatReplyNo ((int) 13)
